@@ -30,6 +30,13 @@ Service Name used in PODs
 	2. DNS
 	  <SERVICE_NAME>.<PROJECT_NAME>.svc.cluster.local FQDN name.
 
+
+Route Name created by OpenShift
+===============================
+	<ROUTE_NAME>-<PROJ_NAME>.<DOMAIN_WILDCARD>
+	<DOMAIN_WILDCARD> = apps.<BASE_DOMAIN>
+
+
 Troubleshoot Certificate Signing
 ================================
 export KUBECONFIG={kubeconfig CERT file}
@@ -42,6 +49,7 @@ Chap 8
 Operators
 ---------
 	oc get clusterversion
+	oc describe clusterversion			# check cluster status
 	oc get co					# list cluster operators
 	oc get crd | grep <keyword>			# find CRD related to co
 	oc get <CRD>					# to list the CR
@@ -51,3 +59,17 @@ Operators
 
 	Tips:
 		* you can also use 'oc describe co <CO-NAME>' to check what are the CRs used by the cluster operators, under "Related Objects".
+
+
+Chap 9
+======
+Checking Cluster Health
+-----------------------
+	oc adm node-logs [-u {crio|kubelet}] <MASTER_NODE>
+	oc debug node/<MASTER_NODE>				# access master node
+		oc debug node/master01
+		chroot /host
+	crictl ps 						# check containers
+
+	Tips:
+		Other than the base services(kubelet and cri-o) and static/regular pods checking, it's also useful to check the status of the operators as listed in Chap 8 above. After all, the whole cluster IS MANAGED by the operators.
