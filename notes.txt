@@ -4,14 +4,23 @@ oc start-build|cancel-build <BC_NAME>
 oc rollout latest|history|cancel|retry|pause|resume|status|undo <DC_NAME>
 oc rollback <DC_NAME>
 
-oc set triggers bc|dc <RT_NAME> [--from-config] [--from-image=<URI>] [--from-github] [--from-webhook] [--auto] [--remove]
+oc set triggers bc|dc <RT_NAME> \
+        [--from-config] \
+        [--from-image=<URI>] \
+        [--from-github] \
+        [--from-webhook] \
+        [--auto] [--remove]
 
 oc set build-hook bc/<RT_NAME> --post-commit --command <CMD> [--verbose]
 oc set build-hook bc/<RT_NAME> --post-commit --script <SCRIPT>
 
 oc set env dc <RT_NAME> --from {cm/<RT_NAME> | secret/<RT_NAME>}
 
-oc set volume dc <RT_NAME> --add -t secret/cm {--secret-name <SECRET_NAME> | --configmap-name <CM_NAME>} -m <MNT_PATH> --name <NEW_VOL_NAME>
+oc set volume dc <RT_NAME> \
+        --add -t secret/cm \
+        {--secret-name <SECRET_NAME> | --configmap-name <CM_NAME>} \
+        -m <MNT_PATH> \
+        --name <NEW_VOL_NAME>
 
 IMAGE MANAGEMENT
 ================
@@ -24,52 +33,55 @@ where,
 Service Name used in PODs
 =========================
 2 Ways of using Service:
-	1. ENVIRONMENT VAR
-	  <SERVICE_NAME>_SERVICE_HOST environment variable in pods. Service has to be created first.
+        1. ENVIRONMENT VAR
+          <SERVICE_NAME>_SERVICE_HOST environment variable in pods. Service has to be created first.
 
-	2. DNS
-	  <SERVICE_NAME>.<PROJECT_NAME>.svc.cluster.local FQDN name.
+        2. DNS
+          <SERVICE_NAME>.<PROJECT_NAME>.svc.cluster.local FQDN name.
 
 
 Route Name created by OpenShift
 ===============================
-	<ROUTE_NAME>-<PROJ_NAME>.<DOMAIN_WILDCARD>
-	<DOMAIN_WILDCARD> = apps.<BASE_DOMAIN>
+        <ROUTE_NAME>-<PROJ_NAME>.<DOMAIN_WILDCARD>
+        <DOMAIN_WILDCARD> = apps.<BASE_DOMAIN>
 
 
 Troubleshoot Certificate Signing
 ================================
-export KUBECONFIG={kubeconfig CERT file}
-oc get csr
-oc adm certificate approve {list of id's from oc get csr with pending status}
+        export KUBECONFIG={kubeconfig CERT file}
+        oc get csr
+        oc adm certificate approve {list of id's from oc get csr with pending status}
 
 
 Chap 8
 ======
 Operators
 ---------
-	oc get clusterversion
-	oc describe clusterversion			# check cluster status
-	oc get co					# list cluster operators
-	oc get crd | grep <keyword>			# find CRD related to co
-	oc get <CRD>					# to list the CR
-	oc get <CRD> <CR> -o yaml | grep -i apiversion -A1	# to get <apiversion> and <kind>
-	oc explain <kind>.spec --api-version <apiversion>	# learn contents of CR
+        oc get clusterversion
+        oc describe clusterversion			# check cluster status
+        oc get co					# list cluster operators
+        oc get crd | grep <keyword>			# find CRD related to co
+        oc get <CRD>					# to list the CR
+        oc get <CRD> <CR> -o yaml | grep -i apiversion -A1	# to get <apiversion> and <kind>
+        oc explain <kind>.spec --api-version <apiversion>	# learn contents of CR
 
 
-	Tips:
-		* you can also use 'oc describe co <CO-NAME>' to check what are the CRs used by the cluster operators, under "Related Objects".
+        Tips:
+                * you can also use 'oc describe co <CO-NAME>' to check what are the CRs
+                  used by the cluster operators, under "Related Objects".
 
 
 Chap 9
 ======
 Checking Cluster Health
 -----------------------
-	oc adm node-logs [-u {crio|kubelet}] <MASTER_NODE>
-	oc debug node/<MASTER_NODE>				# access master node
-		oc debug node/master01
-		chroot /host
-	crictl ps 						# check containers
+        oc adm node-logs [-u {crio|kubelet}] <MASTER_NODE>
+        oc debug node/<MASTER_NODE>				# access master node
+                oc debug node/master01
+                chroot /host
+        crictl ps 						# check containers
 
-	Tips:
-		Other than the base services(kubelet and cri-o) and static/regular pods checking, it's also useful to check the status of the operators as listed in Chap 8 above. After all, the whole cluster IS MANAGED by the operators.
+        Tips:
+                * Other than the base services(kubelet and cri-o) and static/regular pods checking,
+                  it's also useful to check the status of the operators as listed in Chap 8 above.
+                  After all, the whole cluster IS MANAGED by the operators.
