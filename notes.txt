@@ -437,9 +437,9 @@ Chap 13
 
         oc describe limitrange <RT_NAME>
 
-        oc create clusterquota <RT_NAME>
-          [--project-annotation-selector <KEY>=<VALUE>]
-          [--project-label-selector <KEY>=<VALUE>]
+        oc create clusterquota <RT_NAME> \
+          [--project-annotation-selector <KEY>=<VALUE>] \
+          [--project-label-selector <KEY>=<VALUE>] \
           --hard pods=<AMOUNT>,services=<AMOUNT>
 
         Creating Default Proj Template
