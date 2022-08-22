@@ -24,7 +24,8 @@ podman ps
 podman ps -a
 
 # Save the ubi-web container as an image that we can use in future
-podman commit -a "Student Name" -c 'ENTRYPOINT ["httpd"]' -c 'CMD ["-D", "FOREGROUND"]' -c "EXPOSE 8080" ubi-web quay.io/<YOUR_USERNAME>/ubi-web:1.0
+# Earlier versions of podman requires that the CMD list doesn't have space after the comma(,)
+podman commit -a "Student Name" -c 'ENTRYPOINT ["httpd"]' -c 'CMD ["-D","FOREGROUND"]' -c "EXPOSE 8080" ubi-web quay.io/<YOUR_USERNAME>/ubi-web:1.0
 
 # List out the images
 podman images
